@@ -8,46 +8,51 @@ import people from '../../stores/people';
 // Stateful component
 const App = React.createClass({
 
-	getInitialState() {
-		return {
-			page: 'home',
-			people: people.get()
-		};
-	},
+  getInitialState() {
+    return {
+      page: 'home',
+      people: people.get()
+    };
+  },
 
-	getDefaultProps() {
-		return {
-			data: []
-		};
-	},
+  getDefaultProps() {
+    return {
+      data: []
+    };
+  },
 
-	componentWillMount() {
-		people.on('update', this.handleStoreUpdate);
-	},
+  componentWillMount() {
+    people.on('update', this.handleStoreUpdate);
+    people.fetch().then(data => {
+      this.setState({
+        people: data
+      });
+    });
+  },
 
-	handleStoreUpdate(data) {
-		this.setState({
-			people: data
-		});
-	},
+  handleStoreUpdate(data) {
+    this.setState({
+      people: data
+    });
+  },
 
-	setPage(page) {
-		this.setState({ page });
-	},
+  setPage(page) {
+    this.setState({ page });
+  },
 
   render() {
-  	let page = '404';
-  	if (this.state.page === 'home') {
-  		page = <Home people={this.state.people} />;
-  	} else if (this.state.page === 'about') {
-  		page = <h1>About</h1>;
-  	}
-  	return (
-  		<main>
-  			<Nav onLinkClick={this.setPage} />
-  			{page}
-  		</main>
-  	);
+    let page = '404';
+    if (this.state.page === 'home') {
+      page = <Home people={this.state.people} />;
+    } else if (this.state.page === 'about') {
+      page = <h1>About</h1>;
+    }
+    return (
+      <main>
+        <Nav onLinkClick={this.setPage} />
+        {page}
+      </main>
+    );
   },
 
   componentDidMount() {
@@ -55,7 +60,7 @@ const App = React.createClass({
   },
 
   componentWillUnmount() {
-		people.removeEventListener('update', this.handleStoreUpdate);
+    people.removeEventListener('update', this.handleStoreUpdate);
   }
 
 });
