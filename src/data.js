@@ -1,4 +1,4 @@
-export default const data = [
+const data = [
   {
     first: 'Daniel',
     last: 'Vasylenko'
@@ -64,3 +64,5 @@ export default const data = [
     last: 'McCue'
   }
 ];
+
+export default data;
